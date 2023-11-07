@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dleplugin>
+	<name>Ratingscore likes</name>
+	<description></description>
+	<icon></icon>
+	<version></version>
+	<dleversion></dleversion>
+	<versioncompare>less</versioncompare>
+	<upgradeurl></upgradeurl>
+	<filedelete>0</filedelete>
+	<needplugin></needplugin>
+	<mnotice>0</mnotice>
+	<mysqlinstall><![CDATA[]]></mysqlinstall>
+	<mysqlupgrade><![CDATA[]]></mysqlupgrade>
+	<mysqlenable><![CDATA[]]></mysqlenable>
+	<mysqldisable><![CDATA[]]></mysqldisable>
+	<mysqldelete><![CDATA[]]></mysqldelete>
+	<phpinstall><![CDATA[]]></phpinstall>
+	<phpupgrade><![CDATA[]]></phpupgrade>
+	<phpenable><![CDATA[]]></phpenable>
+	<phpdisable><![CDATA[]]></phpdisable>
+	<phpdelete><![CDATA[]]></phpdelete>
+	<notice><![CDATA[]]></notice>
+	<file name="engine/modules/show.full.php">
+		<operation action="after">
+			<searchcode><![CDATA[if( $row['vote_num'] ) $ratingscore = str_replace( ',', '.', round( ($row['rating'] / $row['vote_num']), 1 ) );
+			else $ratingscore = 0;]]></searchcode>
+			<replacecode><![CDATA[if( $row['vote_num'] ) $ratingscorelikes = str_replace( ',', '.', round( ( ($row['vote_num'] - $dislikes ) / $row['vote_num']*10), 1 ) );
+			else $ratingscorelikes = 0;]]></replacecode>
+		</operation>
+		<operation action="after">
+			<searchcode><![CDATA[$tpl->set( '{ratingscore}', $ratingscore );]]></searchcode>
+			<replacecode><![CDATA[$tpl->set( '{ratingscorelikes}', $ratingscorelikes );]]></replacecode>
+		</operation>
+	</file>
+	<file name="engine/modules/show.short.php">
+		<operation action="after">
+			<searchcode><![CDATA[$dislikes = ($row['vote_num'] - $row['rating'])/2;
+			$likes = $row['vote_num'] - $dislikes;]]></searchcode>
+			<replacecode><![CDATA[if( $row['vote_num'] ) $ratingscorelikes = str_replace( ',', '.', round( ( ($row['vote_num'] - $dislikes ) / $row['vote_num']*10), 1 ) );
+			else $ratingscorelikes = 0;]]></replacecode>
+		</operation>
+		<operation action="after">
+			<searchcode><![CDATA[$tpl->set( '[/rating]', "" );]]></searchcode>
+			<replacecode><![CDATA[$tpl->set( '{ratingscorelikes}', $ratingscorelikes );]]></replacecode>
+		</operation>
+	</file>
+	<file name="engine/modules/show.custom.php">
+		<operation action="after">
+			<searchcode><![CDATA[$dislikes = ($row['vote_num'] - $row['rating'])/2;
+			$likes = $row['vote_num'] - $dislikes;]]></searchcode>
+			<replacecode><![CDATA[if( $row['vote_num'] ) $ratingscorelikes = str_replace( ',', '.', round( ( ($row['vote_num'] - $dislikes ) / $row['vote_num']*10), 1 ) );
+			else $ratingscorelikes = 0;]]></replacecode>
+		</operation>
+		<operation action="after">
+			<searchcode><![CDATA[$tpl->set( '[/rating]', "" );]]></searchcode>
+			<replacecode><![CDATA[$tpl->set( '{ratingscorelikes}', $ratingscorelikes );]]></replacecode>
+		</operation>
+	</file>
+</dleplugin>
